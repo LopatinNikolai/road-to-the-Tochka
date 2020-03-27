@@ -9,6 +9,8 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
@@ -24,7 +26,24 @@ class UsersAdapter: RecyclerView.Adapter<UsersAdapter.UserViewHolder> {
             listUserView = itemView.findViewById(R.id.tv_user_item)
             itemView.setOnClickListener{
                 var i = adapterPosition
-                GitInfoQueryTask().execute(URL(users[i].url))
+                val repository = SearchLoginProvider.provideSearchLogin()
+                repository.searchLogin(users[i].login)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe ({
+                            result ->
+                        var secAct = SecondActivity::class.java
+                        var secActIntent:Intent =Intent(parent,secAct)
+                        secActIntent.putExtra("login",result.login)
+                        secActIntent.putExtra("name",result.name)
+                        secActIntent.putExtra("public_repos",result.public_repos)
+                        secActIntent.putExtra("followers",result.followers)
+                        secActIntent.putExtra("following",result.following)
+                        parent.startActivity(secActIntent)
+                    }, { error ->
+                        error.printStackTrace()
+                    })
+           //     GitInfoQueryTask().execute(URL(users[i].url))
 
 
 
@@ -34,34 +53,9 @@ class UsersAdapter: RecyclerView.Adapter<UsersAdapter.UserViewHolder> {
             listUserView.text = userlogin
         }
     }
-   inner class GitInfoQueryTask : AsyncTask<URL, Unit, String>() {
-        override fun doInBackground(vararg params: URL?): String {
-            var res:String? = null
-            try {
-                res = Network.getResponseFromUrl(params[0])
 
-
-            }catch ( e : IOException){
-                e.printStackTrace()
-            }
-            return res.toString()
-        }
-
-        override fun onPostExecute(result: String?) {
-            var jsonRes = JSONObject(result)
-            var secAct = SecondActivity::class.java
-            var secActIntent:Intent =Intent(parent,secAct)
-            secActIntent.putExtra("login",jsonRes.getString("login"))
-            secActIntent.putExtra("name",jsonRes.getString("name"))
-            secActIntent.putExtra("public_repos",jsonRes.getString("public_repos"))
-            secActIntent.putExtra("followers",jsonRes.getString("followers"))
-            secActIntent.putExtra("following",jsonRes.getString("following"))
-            parent.startActivity(secActIntent)
-        }
-    }
-
-    private var users = mutableListOf<User>()
-    constructor(users : MutableList<User>, parent: Context){
+    private var users = mutableListOf<UserGit>()
+    constructor(users : MutableList<UserGit>, parent: Context){
        this.users = users
         this.parent=parent
     }

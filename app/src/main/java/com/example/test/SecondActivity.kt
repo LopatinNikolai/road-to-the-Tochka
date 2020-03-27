@@ -26,19 +26,19 @@ class SecondActivity : AppCompatActivity() {
         followers = findViewById(R.id.followers)
         following = findViewById(R.id.following)
         var intentSec: Intent = getIntent()
-        if(intentSec.hasExtra("login")){
+        if(intentSec.hasExtra("login")!== null){
             login.setText("login:"+intentSec.getStringExtra("login"))
         }
-        if(intentSec.hasExtra("name")){
+        if(intentSec.hasExtra("name")!== null){
             name.setText("name:"+intentSec.getStringExtra("name"))
         }
-        if(intentSec.hasExtra("public_repos")){
+        if(intentSec.hasExtra("public_repos")!== null){
             publicRepos.setText("public repos:"+intentSec.getStringExtra("public_repos"))
         }
-        if(intentSec.hasExtra("followers")){
+        if(intentSec.hasExtra("followers")!== null){
             followers.setText("followers:"+intentSec.getStringExtra("followers"))
         }
-        if(intentSec.hasExtra("following")){
+        if(intentSec.hasExtra("following")!== null){
             following.setText("following:"+intentSec.getStringExtra("following"))
         }
     }

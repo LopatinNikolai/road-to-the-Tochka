@@ -3,4 +3,6 @@
     <string name="Github_Search">Github Search Users</string>
     <string name="name">enter name</string>
     <string name="search">search</string>
+    <string name="Next_page">&gt;</string>
+    <string name="Previous_page">&lt;</string>
 </resources>
