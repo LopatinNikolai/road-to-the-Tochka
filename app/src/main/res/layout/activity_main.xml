@@ -54,14 +54,14 @@
             android:gravity="center">
 
             <Button
-                android:onClick="onClick"
+                android:onClick="onClickPrevious"
                 android:id="@+id/previous_page"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/Previous_page"></Button>
 
             <Button
-                android:onClick="onClick"
+                android:onClick="onClickNext"
                 android:id="@+id/next_page"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
